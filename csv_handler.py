@@ -4,27 +4,50 @@ import matplotlib.pyplot as plt
 with open('datos1.csv') as csv_file:
     csv_reader = csv.reader(csv_file, delimiter=';')
     elementos = list(csv_reader)
-    edades = list()
-    genero = list()
-    imc = list()
-    hijos = list()
-    fumador = list()
-    region = list()
-    cargos = list()
     regiones = {
-        'northeast': 0,
-        'northwest': 1,
-        'southeast': 2,
-        'southwest': 3
+        'northeast': 'ne',
+        'northwest': 'nw',
+        'southeast': 'se',
+        'southwest': 'sw'
     }
+    dic = {
+        'h_f_ne' : [],
+        'm_f_ne' : [],
+        'h_n_ne' : [],
+        'm_n_ne' : [],
+        'h_f_nw' : [],
+        'm_f_nw' : [],
+        'h_n_nw' : [],
+        'm_n_nw' : [],
+        'h_f_se' : [],
+        'm_f_se' : [],
+        'h_n_se' : [],
+        'm_n_se' : [],
+        'h_f_sw' : [],
+        'm_f_sw' : [],
+        'h_n_sw' : [],
+        'm_n_sw' : [],
+    }
+    genero = {
+        'male' : 'h',
+        'female' : 'm'
+    }
+    fumador = {
+        'yes' : 'f',
+        'no' : 'n'
+    }
+    i = 0
     for fila in elementos[1:]:
-        edades.append(int(fila[0]))
-        genero.append(0 if fila[1] == 'female' else 1)
-        imc.append(float(fila[2]))
-        hijos.append(int(fila[3]))
-        fumador.append(1 if fila[4] == 'yes' else 0)
-        region.append(regiones.get(fila[5]))
-        cargos.append(float(fila[6].replace('.','')))
-    print(region)
-    plt.plot(edades)
-    plt.show()
+        region = regiones.get(fila[5])
+        fum = fumador.get(fila[4])
+        gen = genero.get(fila[1])
+        categoria = ''.join([gen,'_',fum,'_',region])
+        dic[categoria].append({
+            'edad': int(fila[0]),
+            'imc': float(fila[2]),
+            'hijos': int(fila[3]),
+            'cargos': float(fila[6].replace('.',''))
+        })
+        i = i + 1
+
+print(dic)
