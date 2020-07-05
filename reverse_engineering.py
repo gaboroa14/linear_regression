@@ -72,12 +72,12 @@ fig.tight_layout()
 figure.tight_layout()
 #plt.show()
 
-print("\nANOVA:\n")
+print("\n4) ANOVA:\n")
 f = sci.f_oneway(data["bmi"],data["region"])
 print(f)
 
 
-print("\n Modelo Lineal:\n")
+print("\n5) MODELO LINEAL:\n")
 mod = smf.ols('charges ~ age + sex + bmi + children + smoker + region', data=data).fit()
 print(mod.summary())
 print(mod.params)
