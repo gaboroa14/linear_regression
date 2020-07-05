@@ -1,0 +1,260 @@
+
+ 1) EXPLORACION DE LOS DATOS:
+
+Categorización por sexo: (0 = Mujeres, 1 = Hombres): 
+0    357
+1    354
+Name: sex, dtype: int64
+
+Categorización por fumadores: (0 = No, 1 = Sí): 
+0    571
+1    140
+Name: smoker, dtype: int64
+
+Categorización por región: 0 NE, 1 NW, 2 SE, 3 SW: 
+2    206
+0    175
+3    168
+1    162
+Name: region, dtype: int64
+
+Categorización por cantidad de hijos: 
+0    312
+1    168
+2    129
+3     81
+4     13
+5      8
+Name: children, dtype: int64
+
+Exploración descriptiva de los datos cuantitativos: 
+              age         sex         bmi  ...      smoker      region       charges
+count  711.000000  711.000000  711.000000  ...  711.000000  711.000000  7.110000e+02
+mean    39.631505    0.497890   31.002841  ...    0.196906    1.516174  5.040429e+08
+std     14.343741    0.500348    6.003320  ...    0.397940    1.102854  1.000085e+09
+min     18.000000    0.000000   15.960000  ...    0.000000    0.000000  2.302300e+04
+25%     27.000000    0.000000   26.820000  ...    0.000000    1.000000  1.621764e+07
+50%     40.000000    0.000000   30.800000  ...    0.000000    2.000000  8.606217e+07
+75%     52.000000    1.000000   35.175000  ...    0.000000    2.000000  4.049635e+08
+max     64.000000    1.000000   49.060000  ...    1.000000    3.000000  7.323735e+09
+
+[8 rows x 7 columns]
+
+ 2) MATRIZ DE CORRELACION
+
+
+ Correlación lineal de los datos: 
+            age    sex    bmi  children  smoker  region  charges
+age       1.000 -0.044  0.130     0.069   0.006  -0.025    0.165
+sex      -0.044  1.000  0.006     0.012   0.101   0.006   -0.004
+bmi       0.130  0.006  1.000     0.048  -0.005   0.131    0.081
+children  0.069  0.012  0.048     1.000   0.006  -0.001    0.023
+smoker    0.006  0.101 -0.005     0.006   1.000   0.018    0.232
+region   -0.025  0.006  0.131    -0.001   0.018   1.000   -0.268
+charges   0.165 -0.004  0.081     0.023   0.232  -0.268    1.000
+
+ANOVA:
+
+F_onewayResult(statistic=16592.933838932273, pvalue=0.0)
+
+ Modelo Lineal:
+
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                charges   R-squared:                       0.163
+Model:                            OLS   Adj. R-squared:                  0.156
+Method:                 Least Squares   F-statistic:                     22.84
+Date:                Sun, 05 Jul 2020   Prob (F-statistic):           1.10e-24
+Time:                        10:32:07   Log-Likelihood:                -15679.
+No. Observations:                 711   AIC:                         3.137e+04
+Df Residuals:                     704   BIC:                         3.140e+04
+Df Model:                           6                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept  -1.215e+08   2.02e+08     -0.602      0.547   -5.18e+08    2.75e+08
+age         9.897e+06   2.43e+06      4.065      0.000    5.12e+06    1.47e+07
+sex        -4.114e+07   6.94e+07     -0.593      0.553   -1.77e+08     9.5e+07
+bmi         1.668e+07   5.85e+06      2.851      0.004    5.19e+06    2.82e+07
+children    5.796e+06   2.91e+07      0.199      0.842   -5.13e+07    6.28e+07
+smoker      6.007e+08   8.71e+07      6.894      0.000     4.3e+08    7.72e+08
+region     -2.558e+08   3.16e+07     -8.102      0.000   -3.18e+08   -1.94e+08
+==============================================================================
+Omnibus:                      422.637   Durbin-Watson:                   1.976
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             3349.450
+Skew:                           2.642   Prob(JB):                         0.00
+Kurtosis:                      12.227   Cond. No.                         305.
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Intercept   -1.215315e+08
+age          9.896890e+06
+sex         -4.113661e+07
+bmi          1.668257e+07
+children     5.796342e+06
+smoker       6.006753e+08
+region      -2.558150e+08
+dtype: float64
+Coheficiente de determinación: 0.1629467121280711
+
+
+ Modelo Lineal por región:
+
+
+Región Noreste:
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                charges   R-squared:                       0.228
+Model:                            OLS   Adj. R-squared:                  0.205
+Method:                 Least Squares   F-statistic:                     9.966
+Date:                Sun, 05 Jul 2020   Prob (F-statistic):           2.26e-08
+Time:                        10:32:07   Log-Likelihood:                -3893.4
+No. Observations:                 175   AIC:                             7799.
+Df Residuals:                     169   BIC:                             7818.
+Df Model:                           5                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept  -1.309e+09   4.98e+08     -2.628      0.009   -2.29e+09   -3.26e+08
+age         8.896e+06   6.25e+06      1.424      0.156   -3.44e+06    2.12e+07
+sex        -1.256e+08   1.73e+08     -0.728      0.468   -4.66e+08    2.15e+08
+bmi         5.514e+07   1.55e+07      3.560      0.000    2.46e+07    8.57e+07
+children   -6.864e+06   7.28e+07     -0.094      0.925   -1.51e+08    1.37e+08
+smoker      1.279e+09   2.23e+08      5.737      0.000    8.39e+08    1.72e+09
+==============================================================================
+Omnibus:                       91.265   Durbin-Watson:                   1.980
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              539.304
+Skew:                           1.878   Prob(JB):                    7.79e-118
+Kurtosis:                      10.737   Cond. No.                         304.
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Intercept   -1.309416e+09
+age          8.895801e+06
+sex         -1.255799e+08
+bmi          5.513919e+07
+children    -6.864121e+06
+smoker       1.279231e+09
+dtype: float64
+Coheficiente de determinación: 0.22771787714132485
+
+Región Noroeste:
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                charges   R-squared:                       0.246
+Model:                            OLS   Adj. R-squared:                  0.222
+Method:                 Least Squares   F-statistic:                     10.20
+Date:                Sun, 05 Jul 2020   Prob (F-statistic):           1.79e-08
+Time:                        10:32:07   Log-Likelihood:                -3563.7
+No. Observations:                 162   AIC:                             7139.
+Df Residuals:                     156   BIC:                             7158.
+Df Model:                           5                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept  -1.069e+09   4.58e+08     -2.332      0.021   -1.97e+09   -1.64e+08
+age         1.656e+07   4.81e+06      3.444      0.001    7.06e+06    2.61e+07
+sex         1.393e+08    1.4e+08      0.996      0.321   -1.37e+08    4.16e+08
+bmi         2.308e+07   1.38e+07      1.672      0.097   -4.19e+06    5.04e+07
+children    1.221e+08   6.09e+07      2.007      0.047     1.9e+06    2.42e+08
+smoker      9.041e+08    1.8e+08      5.035      0.000    5.49e+08    1.26e+09
+==============================================================================
+Omnibus:                       44.949   Durbin-Watson:                   2.158
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):               79.364
+Skew:                           1.354   Prob(JB):                     5.84e-18
+Kurtosis:                       5.103   Cond. No.                         338.
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Intercept   -1.069006e+09
+age          1.656190e+07
+sex          1.393272e+08
+bmi          2.308428e+07
+children     1.221065e+08
+smoker       9.041346e+08
+dtype: float64
+Coheficiente de determinación: 0.2464213693862063
+
+Región Sureste:
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                charges   R-squared:                       0.061
+Model:                            OLS   Adj. R-squared:                  0.037
+Method:                 Least Squares   F-statistic:                     2.597
+Date:                Sun, 05 Jul 2020   Prob (F-statistic):             0.0266
+Time:                        10:32:07   Log-Likelihood:                -4523.7
+No. Observations:                 206   AIC:                             9059.
+Df Residuals:                     200   BIC:                             9079.
+Df Model:                           5                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept  -2.218e+08   3.47e+08     -0.639      0.524   -9.07e+08    4.63e+08
+age          1.13e+07   4.18e+06      2.708      0.007    3.07e+06    1.95e+07
+sex        -8.405e+07    1.2e+08     -0.703      0.483    -3.2e+08    1.52e+08
+bmi         5.895e+06   9.27e+06      0.636      0.526   -1.24e+07    2.42e+07
+children   -5.458e+07   5.18e+07     -1.055      0.293   -1.57e+08    4.75e+07
+smoker       2.83e+08   1.43e+08      1.975      0.050    4.46e+05    5.66e+08
+==============================================================================
+Omnibus:                      170.098   Durbin-Watson:                   1.984
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             1763.752
+Skew:                           3.309   Prob(JB):                         0.00
+Kurtosis:                      15.716   Cond. No.                         312.
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Intercept   -2.218341e+08
+age          1.130425e+07
+sex         -8.404937e+07
+bmi          5.894502e+06
+children    -5.458009e+07
+smoker       2.830020e+08
+dtype: float64
+Coheficiente de determinación: 0.06095818308040135
+
+Región Suroeste:
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                charges   R-squared:                       0.006
+Model:                            OLS   Adj. R-squared:                 -0.025
+Method:                 Least Squares   F-statistic:                    0.1854
+Date:                Sun, 05 Jul 2020   Prob (F-statistic):              0.968
+Time:                        10:32:07   Log-Likelihood:                -3640.3
+No. Observations:                 168   AIC:                             7293.
+Df Residuals:                     162   BIC:                             7311.
+Df Model:                           5                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept   1.672e+08   2.87e+08      0.582      0.561      -4e+08    7.34e+08
+age        -7.448e+05   3.59e+06     -0.208      0.836   -7.83e+06    6.34e+06
+sex         1.369e+07   9.91e+07      0.138      0.890   -1.82e+08    2.09e+08
+bmi         7.397e+05    9.2e+06      0.080      0.936   -1.74e+07    1.89e+07
+children   -3.244e+07    3.9e+07     -0.832      0.407   -1.09e+08    4.46e+07
+smoker       4.79e+07   1.26e+08      0.379      0.705   -2.02e+08    2.97e+08
+==============================================================================
+Omnibus:                      213.078   Durbin-Watson:                   2.074
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             7227.157
+Skew:                           5.283   Prob(JB):                         0.00
+Kurtosis:                      33.345   Cond. No.                         304.
+==============================================================================
+
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+Intercept    1.671746e+08
+age         -7.447535e+05
+sex          1.369206e+07
+bmi          7.397354e+05
+children    -3.243950e+07
+smoker       4.789612e+07
+dtype: float64
+Coheficiente de determinación: 0.0056910725613011914
