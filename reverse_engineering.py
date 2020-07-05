@@ -78,6 +78,12 @@ print(f)
 
 
 print("\n Modelo Lineal:\n")
+mod = smf.ols('charges ~ age + sex + bmi + children + smoker + region', data=data).fit()
+print(mod.summary())
+print(mod.params)
+print('Coheficiente de determinación:', mod.rsquared)
+
+print("\n\n Modelo Lineal por región:\n")
 for region, df_region in data.groupby('region'):
     if region == 0:
         ne = df_region
@@ -87,7 +93,23 @@ for region, df_region in data.groupby('region'):
         se = df_region
     else:
         sw = df_region
-mod = smf.ols('charges ~ age + sex + bmi + children + smoker + ne', data=data).fit()
+print("\nRegión Noreste:")
+mod = smf.ols('charges ~ age + sex + bmi + children + smoker', data=ne).fit()
+print(mod.summary())
+print(mod.params)
+print('Coheficiente de determinación:', mod.rsquared)
+print("\nRegión Noroeste:")
+mod = smf.ols('charges ~ age + sex + bmi + children + smoker', data=nw).fit()
+print(mod.summary())
+print(mod.params)
+print('Coheficiente de determinación:', mod.rsquared)
+print("\nRegión Sureste:")
+mod = smf.ols('charges ~ age + sex + bmi + children + smoker', data=se).fit()
+print(mod.summary())
+print(mod.params)
+print('Coheficiente de determinación:', mod.rsquared)
+print("\nRegión Suroeste:")
+mod = smf.ols('charges ~ age + sex + bmi + children + smoker', data=sw).fit()
 print(mod.summary())
 print(mod.params)
 print('Coheficiente de determinación:', mod.rsquared)
