@@ -15,11 +15,11 @@ def read_doc(path):  # El parametro es la ruta donde se encuentra almacenado el 
     document.head()
 
     columns = ['age', 'sex', 'bmi', 'children', 'smoker',
-               'region', 'charges']
+               'region', 'charges', 'ne', 'nw', 'se', 'sw']
     document = document[columns]
     document = document[pd.notnull(document['charges'])]
     document.columns = ['age', 'sex', 'bmi',
-                        'children', 'smoker', 'region', 'charges']
+                        'children', 'smoker', 'region', 'charges', 'ne', 'nw', 'se', 'sw']
 
     return document
 
@@ -38,6 +38,7 @@ def train_model(document, drop):  # El parametro es el documento leido anteriorm
 def train_model_normalize(document,drop):
     std = StandardScaler()
     drop.append('charges')
+    print(document)
     datos_normalizados = std.fit_transform(document)
     dataframe_normalizado = pd.DataFrame(datos_normalizados, index=document.index, columns=document.columns)
     #print(dataframe_normalizado)
