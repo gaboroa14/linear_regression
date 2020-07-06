@@ -1,57 +1,56 @@
 
- 1) EXPLORACION DE LOS DATOS:
+5) MODELO LINEAL:
 
-Categorización por sexo: (0 = Mujeres, 1 = Hombres): 
-0    357
-1    354
-Name: sex, dtype: int64
+                            OLS Regression Results                            
+==============================================================================
+Dep. Variable:                charges   R-squared:                       0.164
+Model:                            OLS   Adj. R-squared:                  0.155
+Method:                 Least Squares   F-statistic:                     17.24
+Date:                Sun, 05 Jul 2020   Prob (F-statistic):           1.52e-23
+Time:                        17:20:17   Log-Likelihood:                -15679.
+No. Observations:                 711   AIC:                         3.138e+04
+Df Residuals:                     702   BIC:                         3.142e+04
+Df Model:                           8                                         
+Covariance Type:            nonrobust                                         
+==============================================================================
+                 coef    std err          t      P>|t|      [0.025      0.975]
+------------------------------------------------------------------------------
+Intercept  -4.333e+08   1.63e+08     -2.651      0.008   -7.54e+08   -1.12e+08
+age         9.775e+06   2.44e+06      4.007      0.000    4.99e+06    1.46e+07
+sex        -4.448e+07   6.95e+07     -0.640      0.522   -1.81e+08    9.19e+07
+bmi         1.818e+07   6.03e+06      3.013      0.003    6.33e+06       3e+07
+children     4.91e+06   2.91e+07      0.169      0.866   -5.22e+07     6.2e+07
+smoker      6.046e+08   8.73e+07      6.928      0.000    4.33e+08    7.76e+08
+ne          2.674e+08   7.05e+07      3.791      0.000    1.29e+08    4.06e+08
+nw          5.959e+07   7.07e+07      0.842      0.400   -7.93e+07    1.98e+08
+se         -2.911e+08    7.8e+07     -3.733      0.000   -4.44e+08   -1.38e+08
+sw         -4.691e+08   7.35e+07     -6.387      0.000   -6.13e+08   -3.25e+08
+==============================================================================
+Omnibus:                      422.772   Durbin-Watson:                   1.976
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             3357.612
+Skew:                           2.642   Prob(JB):                         0.00
+Kurtosis:                      12.242   Cond. No.                     1.55e+17
+==============================================================================
 
-Categorización por fumadores: (0 = No, 1 = Sí): 
-0    571
-1    140
-Name: smoker, dtype: int64
-
-Categorización por región: 0 NE, 1 NW, 2 SE, 3 SW: 
-2    206
-0    175
-3    168
-1    162
-Name: region, dtype: int64
-
-Categorización por cantidad de hijos: 
-0    312
-1    168
-2    129
-3     81
-4     13
-5      8
-Name: children, dtype: int64
-
-Exploración descriptiva de los datos cuantitativos: 
-              age         sex         bmi  ...      smoker      region       charges
-count  711.000000  711.000000  711.000000  ...  711.000000  711.000000  7.110000e+02
-mean    39.631505    0.497890   31.002841  ...    0.196906    1.516174  5.040429e+08
-std     14.343741    0.500348    6.003320  ...    0.397940    1.102854  1.000085e+09
-min     18.000000    0.000000   15.960000  ...    0.000000    0.000000  2.302300e+04
-25%     27.000000    0.000000   26.820000  ...    0.000000    1.000000  1.621764e+07
-50%     40.000000    0.000000   30.800000  ...    0.000000    2.000000  8.606217e+07
-75%     52.000000    1.000000   35.175000  ...    0.000000    2.000000  4.049635e+08
-max     64.000000    1.000000   49.060000  ...    1.000000    3.000000  7.323735e+09
-
-[8 rows x 7 columns]
-
- 2) MATRIZ DE CORRELACION
+Warnings:
+[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+[2] The smallest eigenvalue is 7.95e-29. This might indicate that there are
+strong multicollinearity problems or that the design matrix is singular.
 
 
- Correlación lineal de los datos: 
-            age    sex    bmi  children  smoker  region  charges
-age       1.000 -0.044  0.130     0.069   0.006  -0.025    0.165
-sex      -0.044  1.000  0.006     0.012   0.101   0.006   -0.004
-bmi       0.130  0.006  1.000     0.048  -0.005   0.131    0.081
-children  0.069  0.012  0.048     1.000   0.006  -0.001    0.023
-smoker    0.006  0.101 -0.005     0.006   1.000   0.018    0.232
-region   -0.025  0.006  0.131    -0.001   0.018   1.000   -0.268
-charges   0.165 -0.004  0.081     0.023   0.232  -0.268    1.000
 
-4) ANOVA:
+Intercept   -4.333188e+08
+age          9.774528e+06
+sex         -4.448435e+07
+bmi          1.818025e+07
+children     4.909501e+06
+smoker       6.046324e+08
+ne           2.673607e+08
+nw           5.958665e+07
+se          -2.911492e+08
+sw          -4.691169e+08
+dtype: float64
+Coeficiente de determinación: 0.16423127858426356
+
+
 

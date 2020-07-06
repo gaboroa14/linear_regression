@@ -7,6 +7,7 @@ import statsmodels.formula.api as smf
 from scipy import stats as sci
 from statsmodels.stats.multicomp import (pairwise_tukeyhsd, MultiComparison)
 import statsmodels.stats.multicomp as multi 
+import pylab
 
 def exploracion_datos(data):
     print("\n 1) EXPLORACION DE LOS DATOS:")
@@ -78,35 +79,76 @@ def correlacion_datos(data):
 
 def anova(data):
     print("\n4) ANOVA:\n")
+    #Primero, verificaremos la normalidad de los conjuntos de datos:
     data_anova = {
             'ne': data.loc[data['ne'] == 1]["bmi"],
             'nw': data.loc[data['nw'] == 1]["bmi"],
             'se': data.loc[data['se'] == 1]["bmi"],
             'sw': data.loc[data['sw'] == 1]["bmi"]
     }
-    data_3 = pd.DataFrame(data_anova,columns=['ne','nw','se','sw'])
-    anova = sci.f_oneway(data_3["ne"].dropna(),data_3["nw"].dropna(),data_3["se"].dropna(),data_3["sw"].dropna())
+    dataframe_anova = pd.DataFrame(data_anova,columns=['ne','nw','se','sw'])
+    print(sci.shapiro(dataframe_anova['ne'].dropna()))
+    print(sci.shapiro(dataframe_anova['nw'].dropna()))
+    print(sci.shapiro(dataframe_anova['se'].dropna()))
+    print(sci.shapiro(dataframe_anova['sw'].dropna()))
+    #sm.qqplot(dataframe_anova['ne'].dropna(), line='s')
+    #sm.qqplot(dataframe_anova['nw'].dropna(), line='s')
+    #sm.qqplot(dataframe_anova['se'].dropna(), line='s')
+    #sm.qqplot(dataframe_anova['sw'].dropna(), line='s')
+    pylab.show()
+    anova = sci.f_oneway(dataframe_anova["ne"].dropna(),dataframe_anova["nw"].dropna(),dataframe_anova["se"].dropna(),dataframe_anova["sw"].dropna())
     print(anova)
 
 def modelo_lineal(data):
     print("\n5) MODELO LINEAL:\n")
-    mod = smf.ols('charges ~ age + sex + bmi + children + smoker + region', data=data).fit()
+    data.drop('region',1,inplace=True)
+    mod = smf.ols('charges ~ age + bmi + smoker + ne + nw + se + sw', data=data).fit()
     print(mod.summary())
     print(mod.params)
     print('Coeficiente de determinación:', mod.rsquared)
 
-    data.drop('region',1,inplace=True)
-    print(round(data.corr(),3))
-    mod = smf.ols('charges ~ age + bmi + smoker + ne + se + sw', data=data).fit()
+def modelo_lineal_por_region(data):
+    print("\n\n Modelo Lineal por región:\n")
+    for region, df_region in data.groupby('region'):
+        if region == 0:
+            ne = df_region
+        elif region == 1:
+            nw = df_region
+        elif region == 2:
+            se = df_region
+        else:
+            sw = df_region
+
+    print("\nRegión Noreste:")
+    mod = smf.ols('charges ~ age + bmi + smoker', data=ne).fit()
+    print(mod.summary())
+    print(mod.params)
+    print('Coeficiente de determinación:', mod.rsquared)
+
+    print("\nRegión Noroeste:")
+    mod = smf.ols('charges ~ age + bmi + smoker', data=nw).fit()
+    print(mod.summary())
+    print(mod.params)
+    print('Coeficiente de determinación:', mod.rsquared)
+
+    print("\nRegión Sureste:")
+    mod = smf.ols('charges ~ age + bmi + smoker', data=se).fit()
+    print(mod.summary())
+    print(mod.params)
+    print('Coeficiente de determinación:', mod.rsquared)
+
+    print("\nRegión Suroeste:")
+    mod = smf.ols('charges ~ age + bmi + smoker', data=sw).fit()
     print(mod.summary())
     print(mod.params)
     print('Coeficiente de determinación:', mod.rsquared)
 
 #Leyendo los datos del archivo csv
-data = pd.read_csv('datos2.csv')
-data_desglosada_regiones = pd.read_csv('datos3.csv')
+data = pd.read_csv('datos1.csv')
+data_desglosada_regiones = pd.read_csv('datos2.csv')
 
 #exploracion_datos(data)
 #correlacion_datos(data)
-anova(data_desglosada_regiones)
+#anova(data_desglosada_regiones)
 #modelo_lineal(data_desglosada_regiones)
+modelo_lineal_por_region(data)
