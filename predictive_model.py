@@ -9,6 +9,7 @@ import pandas as pd
 import seaborn as sns
 import numpy as np
 
+
 def read_doc(path):  # El parametro es la ruta donde se encuentra almacenado el documento, seguido del nombre del mismo
     """ Lee el documento .csv de entramiento """
     document = pd.read_csv(path, error_bad_lines=False)
@@ -35,27 +36,29 @@ def train_model(document, drop):  # El parametro es el documento leido anteriorm
     return reg, x_test, y_test
 
 
-def train_model_normalize(document,drop):
+def train_model_normalize(document, drop):
     std = StandardScaler()
     drop.append('charges')
-    print(document)
     datos_normalizados = std.fit_transform(document)
-    dataframe_normalizado = pd.DataFrame(datos_normalizados, index=document.index, columns=document.columns)
-    #print(dataframe_normalizado)
+    dataframe_normalizado = pd.DataFrame(
+        datos_normalizados, index=document.index, columns=document.columns)
+    # print(dataframe_normalizado)
     x = dataframe_normalizado.drop(drop, 1)
     y = dataframe_normalizado['charges']
 
     x_train, x_test, y_train, y_test = train_test_split(x,
                                                         y, train_size=0.7, random_state=1)
 
-    reg = LinearRegression().fit(x_train, y_train)
+    #reg = LinearRegression().fit(x_train, y_train)
     #reg = Ridge(alpha=100).fit(x_train, y_train)
     #br = BayesianRidge()
     #reg = br.fit(x_train, y_train)
-    #reg = Lasso().fit(x_train, y_train)
-    #reg = TweedieRegressor().fit(x_train,y_train)
+    #reg = Lasso(alpha=0.0000005, fit_intercept=False, tol=0.000000000000001,
+    #      max_iter=1000000000).fit(x_train, y_train)
+    reg = TweedieRegressor(alpha=0.1).fit(x_train,y_train)
     corr = x_train.corr()
-    sns.heatmap(corr, mask=np.zeros_like(corr, dtype=np.bool), cmap=sns.diverging_palette(220, 10, as_cmap=True), square=True)
+    sns.heatmap(corr, mask=np.zeros_like(corr, dtype=np.bool),
+                cmap=sns.diverging_palette(220, 10, as_cmap=True), square=True)
     return reg, x_test, y_test
 
 # Los parámetros son: el modelo previamente entrenado y los datos de prueba
@@ -70,7 +73,7 @@ def predict(reg, datos):  # Predice el resultado dado un conjunto de datos.
 
 
 def ejecutar():
-    document = read_doc('datos_git_region.csv')
+    document = read_doc('datos2.csv')
 
     eleccion = input(
         "¿Qué columnas desea ignorar?\nIntroduzcalas separadas con una coma.\n")
@@ -78,7 +81,7 @@ def ejecutar():
     drop = eleccion.split(',')
 
     #modelo, x_test, y_test = train_model(document, drop)
-    modelo, x_test, y_test = train_model_normalize(document,drop)
+    modelo, x_test, y_test = train_model_normalize(document, drop)
 
     y_predicted = predict(modelo, x_test)
     print("Error medio absoluto: {}.".format(
