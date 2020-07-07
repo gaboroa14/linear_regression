@@ -1,3 +1,15 @@
+###############################################
+###                                         ###  
+### ANALISIS DE VARIANZA Y REGRESION LINEAL ###
+###                                         ###
+###   Integrantes:                          ###
+###   Anyeli Villareal CI: 26.002.905       ###
+###   Jose Luis Pacheco C.I:26.169.922      ### 
+###   Dany Karam C.I: 25.147.670            ###
+###   Marielba Maldonado C.I: 26.088.718    ###
+###                                         ###
+###############################################
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -8,6 +20,8 @@ from scipy import stats as sci
 from statsmodels.stats.multicomp import (pairwise_tukeyhsd, MultiComparison)
 import statsmodels.stats.multicomp as multi 
 import pylab
+
+### Este archivo contiene el código usado para las secciones 1 a la 8 del trabajo.
 
 def exploracion_datos(data):
     print("\n 1) EXPLORACION DE LOS DATOS:")
@@ -91,20 +105,24 @@ def anova(data):
     print(sci.shapiro(dataframe_anova['nw'].dropna()))
     print(sci.shapiro(dataframe_anova['se'].dropna()))
     print(sci.shapiro(dataframe_anova['sw'].dropna()))
-    #sm.qqplot(dataframe_anova['ne'].dropna(), line='s')
-    #sm.qqplot(dataframe_anova['nw'].dropna(), line='s')
-    #sm.qqplot(dataframe_anova['se'].dropna(), line='s')
-    #sm.qqplot(dataframe_anova['sw'].dropna(), line='s')
+    sm.qqplot(dataframe_anova['ne'].dropna(), line='s')
+    sm.qqplot(dataframe_anova['nw'].dropna(), line='s')
+    sm.qqplot(dataframe_anova['se'].dropna(), line='s')
+    sm.qqplot(dataframe_anova['sw'].dropna(), line='s')
     pylab.show()
     anova = sci.f_oneway(dataframe_anova["ne"].dropna(),dataframe_anova["nw"].dropna(),dataframe_anova["se"].dropna(),dataframe_anova["sw"].dropna())
     print(anova)
 
 def modelo_lineal(data):
     print("\n5) MODELO LINEAL:\n")
-    data.drop('region',1,inplace=True)
-    mod = smf.ols('charges ~ age + bmi + smoker + ne + nw + se + sw', data=data).fit()
+    #data.drop('region',1,inplace=True)
+    mod = smf.ols('charges ~ age + bmi + smoker + region + sex + children', data=data).fit()
     print(mod.summary())
     print(mod.params)
+    print("\nResiduos del modelo:\n")
+    print(mod.resid.describe())
+    sm.qqplot(mod.resid, line='s')
+    pylab.show()
     print('Coeficiente de determinación:', mod.rsquared)
 
 def modelo_lineal_por_region(data):
@@ -120,35 +138,47 @@ def modelo_lineal_por_region(data):
             sw = df_region
 
     print("\nRegión Noreste:")
-    mod = smf.ols('charges ~ age + bmi + smoker', data=ne).fit()
+    mod = smf.ols('charges ~ age + bmi + smoker + sex + children', data=ne).fit()
     print(mod.summary())
     print(mod.params)
+    print(mod.resid.describe())
+    sm.qqplot(mod.resid, line='s')
+    pylab.show()
     print('Coeficiente de determinación:', mod.rsquared)
 
     print("\nRegión Noroeste:")
-    mod = smf.ols('charges ~ age + bmi + smoker', data=nw).fit()
+    mod = smf.ols('charges ~ age + bmi + smoker + sex + children', data=nw).fit()
     print(mod.summary())
     print(mod.params)
+    print(mod.resid.describe())
+    sm.qqplot(mod.resid, line='s')
+    pylab.show()
     print('Coeficiente de determinación:', mod.rsquared)
 
     print("\nRegión Sureste:")
-    mod = smf.ols('charges ~ age + bmi + smoker', data=se).fit()
+    mod = smf.ols('charges ~ age + bmi + smoker + sex + children', data=se).fit()
     print(mod.summary())
     print(mod.params)
+    print(mod.resid.describe())
+    sm.qqplot(mod.resid, line='s')
+    pylab.show()
     print('Coeficiente de determinación:', mod.rsquared)
 
     print("\nRegión Suroeste:")
-    mod = smf.ols('charges ~ age + bmi + smoker', data=sw).fit()
+    mod = smf.ols('charges ~ age + bmi + smoker + sex + children', data=sw).fit()
     print(mod.summary())
     print(mod.params)
+    print(mod.resid.describe())
+    sm.qqplot(mod.resid, line='s')
+    pylab.show()
     print('Coeficiente de determinación:', mod.rsquared)
 
 #Leyendo los datos del archivo csv
 data = pd.read_csv('datos1.csv')
 data_desglosada_regiones = pd.read_csv('datos2.csv')
 
-#exploracion_datos(data)
-#correlacion_datos(data)
-#anova(data_desglosada_regiones)
-#modelo_lineal(data_desglosada_regiones)
+exploracion_datos(data)
+correlacion_datos(data)
+anova(data_desglosada_regiones)
+modelo_lineal(data_desglosada_regiones)
 modelo_lineal_por_region(data)

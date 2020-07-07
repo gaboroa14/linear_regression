@@ -1,3 +1,15 @@
+###############################################
+###                                         ###  
+### ANALISIS DE VARIANZA Y REGRESION LINEAL ###
+###                                         ###
+###   Integrantes:                          ###
+###   Anyeli Villareal CI: 26.002.905       ###
+###   Jose Luis Pacheco C.I:26.169.922      ### 
+###   Dany Karam C.I: 25.147.670            ###
+###   Marielba Maldonado C.I: 26.088.718    ###
+###                                         ###
+###############################################
+
 from sklearn.linear_model import LinearRegression, Ridge, Lasso, BayesianRidge, TweedieRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -9,6 +21,7 @@ import pandas as pd
 import seaborn as sns
 import numpy as np
 
+### Este archivo contiene el código usado para la sección 9 del trabajo.
 
 def read_doc(path):  # El parametro es la ruta donde se encuentra almacenado el documento, seguido del nombre del mismo
     """ Lee el documento .csv de entramiento """
@@ -61,6 +74,41 @@ def train_model_normalize(document, drop):
                 cmap=sns.diverging_palette(220, 10, as_cmap=True), square=True)
     return reg, x_test, y_test
 
+def train_riesgo(document, drop):
+    #datos_filtrados = document.loc[document['age'] >= 40]
+    indices_riesgo = list()
+    for indice, registro in document.iterrows():
+        indice = 0
+        if registro[4] == 1: 
+            indice = indice + 10000 
+        edad = registro[0] - 40
+        if edad >= 1:
+            indice = indice + (edad * edad)
+        bmi = registro[2] - 25
+        if bmi > 1:
+            indice = indice + bmi * 400 
+        indices_riesgo.append(indice)
+    document['indice_riesgo'] = indices_riesgo
+    datos_filtrados = document.loc[document['indice_riesgo'] < 10400]
+    #datos_filtrados = datos_filtrados.loc[datos_filtrados['bmi'] < 25]
+    #print(datos_filtrados)
+    drop.append('charges')
+    x = datos_filtrados.drop(drop, 1)
+    y = datos_filtrados['charges']
+    #print(x)
+
+    x_train, x_test, y_train, y_test = train_test_split(x,
+                                                        y, train_size=0.7, random_state=1)
+
+    reg = LinearRegression().fit(x_train, y_train)
+    #reg = Ridge(alpha=100).fit(x_train, y_train)
+    #br = BayesianRidge()
+    #reg = br.fit(x_train, y_train)
+    #reg = Lasso(alpha=0.000005, fit_intercept=False, tol=0.00000001,
+    #       max_iter=100000000).fit(x_train, y_train)
+    #reg = TweedieRegressor(alpha=0.1).fit(x_train,y_train)
+    return reg, x_test, y_test
+
 # Los parámetros son: el modelo previamente entrenado y los datos de prueba
 
 
@@ -81,7 +129,8 @@ def ejecutar():
     drop = eleccion.split(',')
 
     #modelo, x_test, y_test = train_model(document, drop)
-    modelo, x_test, y_test = train_model_normalize(document, drop)
+    #modelo, x_test, y_test = train_model_normalize(document, drop)
+    modelo, x_test, y_test = train_riesgo(document, drop)
 
     y_predicted = predict(modelo, x_test)
     print("Error medio absoluto: {}.".format(
